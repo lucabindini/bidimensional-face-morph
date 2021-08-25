@@ -59,7 +59,7 @@ def fit_3dmm1(lm):
     landmarks_3D = landmarks_3D - npm.repmat(baric_3dmm, landmarks_3D.shape[0], 1)
 
     # Load 3DMM params and dictionary
-    componentsfile = h5py.File('SLC-3DMM-master/data/SLC_50_1_1.mat', 'r')
+    componentsfile = h5py.File('SLC-3DMM-master/data/SLC_300_1_1.mat', 'r')
     print(componentsfile.keys())
     Components = np.transpose(np.array(componentsfile['Components']))
     Weights = np.transpose(np.array(componentsfile['Weights']))
