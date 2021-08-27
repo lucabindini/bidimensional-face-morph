@@ -38,7 +38,7 @@ def fit_3dmm(lm):
     result = _3DMM_obj.opt_3DMM_fast(Weights, Components, Components_res,
                                      landmarks_3D, idx_landmarks_3D, lm, avg_model, 0.15, 1, 3.8, 400)
     print('3DMM Fitting Completed')
-    
+
     return result
 
 
@@ -49,7 +49,7 @@ def fit_3dmm1(lm, avg_model):
 
     # Load 3D data
     avgfile = h5py.File('data3dmm/avgModel_bh_1779_NE_mediumBound.mat', 'r')
-    #avg_model = np.transpose(np.array(avgfile['avgModel']))
+    # avg_model = np.transpose(np.array(avgfile['avgModel']))
     idx_landmarks_3D = np.transpose(np.array(avgfile['idxLandmarks3D']))
     idx_landmarks_3D -= 1
     landmarks_3D = np.transpose(np.array(avgfile['landmarks3D']))
@@ -67,7 +67,7 @@ def fit_3dmm1(lm, avg_model):
     Weights = np.array(componentsfile['Weights'])
     aligned_models_data = None
     components_R = Matrix_operations.Matrix_op(Components, aligned_models_data)
-    #components_R.reshape(Components)
+    # components_R.reshape(Components)
     Components_res = components_R.X_res
     print(Components.shape, Weights.shape, Components_res.shape)
     print('Data Loaded.')
@@ -79,5 +79,5 @@ def fit_3dmm1(lm, avg_model):
     result = _3DMM_obj.opt_3DMM_fast(Weights, Components, Components_res,
                                      landmarks_3D, idx_landmarks_3D, lm, avg_model, 0.15, 1, 3.8, 400)
     print('3DMM Fitting Completed')
-    
+
     return result
