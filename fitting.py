@@ -2,7 +2,8 @@ import numpy as np
 import numpy.matlib as npm
 import h5py
 
-from _3DMM import _3DMM
+from deep_3dmm_refinement._3DMM import _3DMM
+from SLC_3DMM import Matrix_operations
 
 
 def fit_3dmm(lm):
@@ -41,17 +42,18 @@ def fit_3dmm(lm):
     return result
 
 
-def fit_3dmm1(lm):
+def fit_3dmm1(lm, avg_model):
     lm = lm[:, :2]
     lm = np.delete(lm, 64, axis=0)
     lm = np.delete(lm, 60, axis=0)
 
     # Load 3D data
     avgfile = h5py.File('data3dmm/avgModel_bh_1779_NE_mediumBound.mat', 'r')
-    avg_model = np.transpose(np.array(avgfile['avgModel']))
+    #avg_model = np.transpose(np.array(avgfile['avgModel']))
     idx_landmarks_3D = np.transpose(np.array(avgfile['idxLandmarks3D']))
     idx_landmarks_3D -= 1
     landmarks_3D = np.transpose(np.array(avgfile['landmarks3D']))
+    print(avg_model.shape, idx_landmarks_3D.shape, landmarks_3D.shape)
 
     # Center to zero
     baric_3dmm = np.mean(avg_model, axis=0)
@@ -59,12 +61,14 @@ def fit_3dmm1(lm):
     landmarks_3D = landmarks_3D - npm.repmat(baric_3dmm, landmarks_3D.shape[0], 1)
 
     # Load 3DMM params and dictionary
-    componentsfile = h5py.File('SLC-3DMM-master/data/SLC_300_1_1.mat', 'r')
+    componentsfile = h5py.File('SLC_3DMM/data/SLC_300_1_1.mat', 'r')
     print(componentsfile.keys())
     Components = np.transpose(np.array(componentsfile['Components']))
-    Weights = np.transpose(np.array(componentsfile['Weights']))
-    componentsfile1 = h5py.File('data3dmm/components_DL_300_1779.mat', 'r')
-    Components_res = np.transpose(np.array(componentsfile1['Components_res']))
+    Weights = np.array(componentsfile['Weights'])
+    aligned_models_data = None
+    components_R = Matrix_operations.Matrix_op(Components, aligned_models_data)
+    #components_R.reshape(Components)
+    Components_res = components_R.X_res
     print(Components.shape, Weights.shape, Components_res.shape)
     print('Data Loaded.')
 
