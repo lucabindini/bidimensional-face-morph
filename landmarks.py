@@ -47,4 +47,4 @@ def lm_dir(path, expression=0, plot=False):
 
 
 def models_error(shape1, shape2):
-    return (((shape1 - shape2) ** 2).sum(axis=1) ** (1 / 2)).mean()
+    return (((shape1 - shape2) ** 2).sum(axis=1) ** (1 / 2))

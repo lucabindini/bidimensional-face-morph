@@ -7,6 +7,12 @@ from SLC_3DMM import Matrix_operations
 
 
 def fit_3dmm(lm):
+    # Fixed Params
+    _lambda = 0.15
+    rounds = 1
+    r = 3.8
+    c_dist = 400
+    
     lm = lm[:, :2]
     lm = np.delete(lm, 64, axis=0)
     lm = np.delete(lm, 60, axis=0)
@@ -36,13 +42,19 @@ def fit_3dmm(lm):
 
     # Fit the 3DMM
     result = _3DMM_obj.opt_3DMM_fast(Weights, Components, Components_res,
-                                     landmarks_3D, idx_landmarks_3D, lm, avg_model, 0.15, 1, 3.8, 400)
+                                     landmarks_3D, idx_landmarks_3D, lm, avg_model, _lambda, rounds, r, c_dist)
     print('3DMM Fitting Completed')
 
     return result
 
 
 def fit_3dmm1(lm, avg_model):
+    # Fixed Params
+    _lambda = 2
+    rounds = 1
+    r = 3.8
+    c_dist = 400
+    
     lm = lm[:, :2]
     lm = np.delete(lm, 64, axis=0)
     lm = np.delete(lm, 60, axis=0)
@@ -77,7 +89,7 @@ def fit_3dmm1(lm, avg_model):
 
     # Fit the 3DMM
     result = _3DMM_obj.opt_3DMM_fast(Weights, Components, Components_res,
-                                     landmarks_3D, idx_landmarks_3D, lm, avg_model, 0.15, 1, 3.8, 400)
+                                     landmarks_3D, idx_landmarks_3D, lm, avg_model, _lambda, rounds, r, c_dist)
     print('3DMM Fitting Completed')
 
     return result
