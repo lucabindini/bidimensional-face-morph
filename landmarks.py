@@ -1,21 +1,23 @@
 import os
 from collections import namedtuple
 
-import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import face_alignment
 
 
-def lm_dir(path, expression=0, plot=False):
+def lm_dir(path, expression, neutral=False, plot=False):
     fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, device='cpu')
 
-    img_path = path + 'rgbReg_frames/%04d/' % (1 if expression == 0 else expression)
+    img_path = path + 'rgbReg_frames/%04d/' % expression
 
-    input_img = mpimg.imread(
-        img_path + (min if expression == 0 else max)(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))
+    if neutral:
+        # adding (expression - 1) to compensate for first few frames coming from a different cut
+        n = int(os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
+    else:
+        n = int(os.path.splitext(max(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0])
 
-    print(img_path + (min if expression == 0 else max)(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))
+    input_img = mpimg.imread(img_path + str(n) + '.jpg')
 
     preds = fa.get_landmarks_from_image(input_img)[-1]
 
