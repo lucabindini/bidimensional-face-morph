@@ -9,10 +9,10 @@ import face_alignment
 def lm_dir(path, expression, neutral=False, plot=False):
     fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, device='cpu')
 
-    img_path = path + 'rgbReg_frames/%04d/' % expression
+    img_path = path + f'rgbReg_frames/{expression:04}/'
 
     if neutral:
-        # adding (expression - 1) to compensate for first few frames coming from a different cut
+        # adding (expression - 1) to compensate for first frames coming from a different cut
         n = int(os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
     else:
         n = int(os.path.splitext(max(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0])
@@ -45,6 +45,8 @@ def lm_dir(path, expression, neutral=False, plot=False):
                     marker='o')
 
         ax.axis(False)
+
+        fig.savefig(f'landmarks_2d/{expression:04}')
     return preds
 
 

@@ -39,5 +39,5 @@ for i in range(1, len(os.listdir('LR/stefano_berretti/rgbReg_frames')) + 1):
 
     fig.colorbar(plot)
     
-    fig.savefig('figures/%04d.png' % i)
+    fig.savefig(f'deformation_heatmaps/{i:04}.png')
 
