@@ -10,7 +10,7 @@ import fitting
 import landmarks
 
 
-for i in range(1, len(os.listdir('LR/stefano_berretti/rgbReg_frames')) + 1):
+for i in range(16, len(os.listdir('LR/stefano_berretti/rgbReg_frames')) + 1):
     print(i)
     preds = landmarks.lm_dir('LR/stefano_berretti/', i, True, True)
 
@@ -21,14 +21,15 @@ for i in range(1, len(os.listdir('LR/stefano_berretti/rgbReg_frames')) + 1):
 
     def_shape = result['defShape']
     ax.scatter3D(*def_shape.transpose(), s=1, c=def_shape[:, 2])
-    
-    preds1 = landmarks.lm_dir('LR/stefano_berretti/', i, False, True)
 
     def_shape_copy = def_shape.copy()
+    fitting.fit_3dmm(preds, def_shape)
+    
+    preds1 = landmarks.lm_dir('LR/stefano_berretti/', i, False, True)
+    def_shape_copy1 = def_shape_copy.copy()
+    result1 = fitting.fit_3dmm(preds1, def_shape_copy)
 
-    result1 = fitting.fit_3dmm(preds1, def_shape)
-
-    errors = landmarks.models_error(def_shape_copy, result1['defShape'])
+    errors = landmarks.models_error(def_shape_copy1, result1['defShape'])
     
     print(errors.mean())
 
