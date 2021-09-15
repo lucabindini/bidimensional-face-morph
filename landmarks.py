@@ -5,15 +5,18 @@ import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
 import face_alignment
 
+OUTPUT_DIR_2D = 'landmarks_2d'
+
 
 def lm_dir(path, expression, neutral=False, plot=False):
     fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, device='cpu')
 
-    img_path = path + f'rgbReg_frames/{expression:04}/'
+    img_path = path + f'/{expression:04}/'
 
     if neutral:
         # adding (expression - 1) to compensate for first frames coming from a different cut
-        n = int(os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
+        n = int(
+            os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
     else:
         n = int(os.path.splitext(max(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0])
 
@@ -37,6 +40,7 @@ def lm_dir(path, expression, neutral=False, plot=False):
 
         fig, ax = plt.subplots()
         ax.imshow(input_img)
+        ax.axis(False)
 
         for pred_type in pred_types.values():
             ax.plot(preds[pred_type.slice, 0],
@@ -44,11 +48,10 @@ def lm_dir(path, expression, neutral=False, plot=False):
                     color=pred_type.color,
                     marker='o')
 
-        ax.axis(False)
-
-        fig.savefig(f'landmarks_2d/{expression:04}')
+        fig.savefig(f'{OUTPUT_DIR_2D}/{expression:04}')
+        plt.close(fig)
     return preds
 
 
 def models_error(shape1, shape2):
-    return (((shape1 - shape2) ** 2).sum(axis=1) ** (1 / 2))
+    return ((shape1 - shape2) ** 2).sum(axis=1) ** (1 / 2)

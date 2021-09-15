@@ -3,42 +3,46 @@
 import os
 
 import matplotlib.pyplot as plt
-from matplotlib import colors
 from mpl_toolkits.mplot3d import Axes3D
 
 import fitting
 import landmarks
 
+FRAMES_PATH = 'LR/stefano_berretti/rgbReg_frames'
+DEF_SHAPE = 'defShape'
+OUTPUT_DIR_3D = 'deformation_heatmaps'
 
-for i in range(16, len(os.listdir('LR/stefano_berretti/rgbReg_frames')) + 1):
+if not os.access(OUTPUT_DIR_3D, os.F_OK):
+    os.mkdir(OUTPUT_DIR_3D)
+if not os.access(landmarks.OUTPUT_DIR_2D, os.F_OK):
+    os.mkdir(landmarks.OUTPUT_DIR_2D)
+
+for i in range(1, len(os.listdir(FRAMES_PATH)) + 1):
     print(i)
-    preds = landmarks.lm_dir('LR/stefano_berretti/', i, True, True)
 
-    result = fitting.fit_3dmm(preds)
+    preds0 = landmarks.lm_dir(FRAMES_PATH, i, True, True)
+    def_shape00 = fitting.fit_3dmm(preds0)[DEF_SHAPE]
 
-    fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1, projection='3d', elev=90, azim=-90)
+    def_shape0 = def_shape00.copy()
+    def_shape00 = fitting.fit_3dmm(preds0, def_shape00)[DEF_SHAPE]
 
-    def_shape = result['defShape']
-    ax.scatter3D(*def_shape.transpose(), s=1, c=def_shape[:, 2])
+    preds1 = landmarks.lm_dir(FRAMES_PATH, i, False, True)
+    def_shape01 = def_shape0.copy()  # def_shape0 -> def_shape00
+    def_shape01 = fitting.fit_3dmm(preds1, def_shape01)[DEF_SHAPE]
 
-    def_shape_copy = def_shape.copy()
-    fitting.fit_3dmm(preds, def_shape)
-    
-    preds1 = landmarks.lm_dir('LR/stefano_berretti/', i, False, True)
-    def_shape_copy1 = def_shape_copy.copy()
-    result1 = fitting.fit_3dmm(preds1, def_shape_copy)
-
-    errors = landmarks.models_error(def_shape_copy1, result1['defShape'])
-    
+    errors = landmarks.models_error(def_shape00, def_shape01)  # def_shape00 -> def_shape0
     print(errors.mean())
 
     fig = plt.figure()
-    ax = fig.add_subplot(1, 1, 1, projection='3d', elev=90, azim=-90)
-    ax.axis(False)
-    plot = ax.scatter3D(*result1['defShape'].transpose(), s=1, c=errors, cmap='jet', norm=colors.PowerNorm(gamma=0.75))
-
+    ax1 = fig.add_subplot(1, 3, 1, projection='3d', elev=90, azim=-90)
+    ax2 = fig.add_subplot(1, 3, 2, projection='3d', elev=90, azim=-90)
+    ax3 = fig.add_subplot(1, 3, 3, projection='3d', elev=90, azim=-90)
+    ax1.scatter3D(*def_shape0.transpose(), s=1, c=errors)
+    ax2.scatter3D(*def_shape00.transpose(), s=1, c=errors)
+    plot = ax3.scatter3D(*def_shape01.transpose(), s=1, c=errors)
+    ax1.axis(False)
+    ax2.axis(False)
+    ax3.axis(False)
     fig.colorbar(plot)
-    
-    fig.savefig(f'deformation_heatmaps/{i:04}.png')
-
+    fig.savefig(f'{OUTPUT_DIR_3D}/{i:04}.png')
+    plt.close(fig)

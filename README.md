@@ -1,5 +1,8 @@
 # Bidimensional face morph
 
+This project aims to measure the facial deformation of a person in an objective way.
+It uses frames captured from a video to create a 3D model of the face which is compared against a frame of the same person in a neutral expression.
+
 ## Requirements
 
 The following are the Python libraries required:
@@ -22,8 +25,7 @@ Create a folder structure like so: `LR/<your_name>/rgbReg_frames/` and inside th
 
 ## Usage
 
-Create two folders called:
-- `landmarks_2d` where the images with the 2D landmarks will be saved
-- `deformation_heatmaps` where your heatmaps for the face deformation will end up.
-
 Run the `main.py` file.
+This will create and populate the following output directories:
+- `landmarks_2d` where the images with the 2D landmarks will be saved;
+- `deformation_heatmaps` where your heatmaps for the face deformation will end up.
