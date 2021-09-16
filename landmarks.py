@@ -8,18 +8,16 @@ import face_alignment
 OUTPUT_DIR_2D = 'landmarks_2d'
 
 
-def lm_dir(path, expression, neutral=False, plot=False):
+def lm_dir(path, expression, fraction, plot=False):
     fa = face_alignment.FaceAlignment(face_alignment.LandmarksType._2D, device='cpu')
 
     img_path = path + f'/{expression:04}/'
 
-    if neutral:
-        # adding (expression - 1) to compensate for first frames coming from a different cut
-        n = int(
-            os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
-    else:
-        n = int(os.path.splitext(max(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0])
-
+    # adding (expression - 1) to compensate for first frames coming from a different cut
+    start = int(
+        os.path.splitext(min(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0]) + expression - 1
+    end = int(os.path.splitext(max(os.listdir(img_path), key=lambda s: int(os.path.splitext(s)[0])))[0])
+    n = start + int((end - start) * fraction)
     input_img = mpimg.imread(img_path + str(n) + '.jpg')
 
     preds = fa.get_landmarks_from_image(input_img)[-1]
@@ -46,7 +44,8 @@ def lm_dir(path, expression, neutral=False, plot=False):
             ax.plot(preds[pred_type.slice, 0],
                     preds[pred_type.slice, 1],
                     color=pred_type.color,
-                    marker='o')
+                    marker='o',
+                    markersize=1)
 
         fig.savefig(f'{OUTPUT_DIR_2D}/{expression:04}')
         plt.close(fig)
