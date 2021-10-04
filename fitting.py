@@ -26,7 +26,7 @@ def fit_3dmm(lm, avg_model=None):
         lambda_ = 0.15
         componentsfile_path = 'data3dmm/components_DL_300_1779.mat'
     else:
-        lambda_ = 1
+        lambda_ = 64
         componentsfile_path = 'SLC_3DMM/data/SLC_300_1_1.mat'
 
     # Load 3DMM params and dictionary

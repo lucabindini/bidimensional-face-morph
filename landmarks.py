@@ -18,15 +18,15 @@ def lm_dir(path, plot=False):
     if plot:
         # 2D-Plot
         pred_type = namedtuple('prediction_type', ['slice', 'color'])
-        pred_types = {'face': pred_type(slice(0, 17), 'C0'),
-                      'eyebrow1': pred_type(slice(17, 22), 'C1'),
-                      'eyebrow2': pred_type(slice(22, 27), 'C1'),
-                      'nose': pred_type(slice(27, 31), 'C2'),
-                      'nostril': pred_type(slice(31, 36), 'C3'),
-                      'eye1': pred_type(slice(36, 42), 'C4'),
-                      'eye2': pred_type(slice(42, 48), 'C4'),
-                      'lips': pred_type(slice(48, 60), 'C5'),
-                      'teeth': pred_type(slice(60, 68), 'C6')
+        pred_types = {'face': pred_type(slice(0, 17), 'b'),
+                      'eyebrow1': pred_type(slice(17, 22), 'g'),
+                      'eyebrow2': pred_type(slice(22, 27), 'g'),
+                      'nose': pred_type(slice(27, 31), 'r'),
+                      'nostril': pred_type(slice(31, 36), 'c'),
+                      'eye1': pred_type(slice(36, 42), 'm'),
+                      'eye2': pred_type(slice(42, 48), 'm'),
+                      'lips': pred_type(slice(48, 60), 'y'),
+                      'teeth': pred_type(slice(60, 68), 'k')
                       }
 
         fig, ax = plt.subplots()
@@ -40,10 +40,10 @@ def lm_dir(path, plot=False):
                     marker='o',
                     markersize=1)
 
-        fig.savefig(f'{OUTPUT_DIR_2D}/{os.path.basename(os.path.dirname(path))}.png')
+        fig.savefig(f'{OUTPUT_DIR_2D}/{os.path.basename(os.path.dirname(path))}.png', bbox_inches='tight', pad_inches=0)
         plt.close(fig)
     return preds
 
 
-def models_error(shape1, shape2):
+def models_deformation(shape1, shape2):
     return ((shape1 - shape2) ** 2).sum(axis=1) ** (1 / 2)
