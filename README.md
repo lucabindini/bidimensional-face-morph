@@ -13,12 +13,12 @@ The following are the Python libraries required:
 - [numpy](https://numpy.org)
 - [matplotlib](https://matplotlib.org)
 - [h5py](https://www.h5py.org/)
-- [face_alignment](https://github.com/1adrianb/face-alignment) by [Adrian Bulat](https://www.adrianbulat.com/)
+- [face_alignment](https://github.com/1adrianb/face-alignment)
 
-You also need to download the following repositories and put them in specific directories:
+You also need to download the following repositories and rename their directories in the specified way:
 
-- [deep-3dmm-refinement](https://github.com/clferrari/deep-3dmm-refinement) inside `deep_3dmm_refinement`
-- [SLC-3DMM](https://github.com/clferrari/SLC-3DMM) inside `SLC-3DMM`
+- [deep-3dmm-refinement](https://github.com/clferrari/deep-3dmm-refinement) as `deep_3dmm_refinement`
+- [SLC-3DMM](https://github.com/clferrari/SLC-3DMM) as `SLC_3DMM`
 
 ## Datasets
 
@@ -26,6 +26,7 @@ Download [data3dmm](https://drive.google.com/file/d/12ull7YHxsqEvF4OlllOc8kneS9h
 
 You must put your frames in a directory and separate them in subdirectories called `0001`, `0002`, etc.
 Each of these subdirectories contains the frames of a video of someone's face that starts from a relaxed facial expression and end up with some kind of grimace.
+The frames must be jpg images called as sequential numbers (e. g. `1916.jpg`, `1917.jpg`, ...)
 
 ## Usage
 
