@@ -79,7 +79,6 @@ for i in range(1, len(os.listdir(FRAMES_PATH)) + 1):
     ax_final = fig_final.add_subplot(1, 1, 1, projection='3d', elev=90, azim=-90)
     ax_final.scatter3D(*def_shape_median.transpose(), s=1, c=def_indices, cmap='jet', vmin=0, vmax=VMAX)
     ax_final.axis(False)
-    ax_final.set_title(f'{y[-1]:.2f}')
     fig_final.savefig(f'{OUTPUT_DIR_3D_FINAL}/{i:04}.png', bbox_inches='tight', pad_inches=0)
     plt.close(fig_final)
 
