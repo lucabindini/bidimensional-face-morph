@@ -40,8 +40,24 @@ def lm_dir(path, plot=False):
                     marker='o',
                     markersize=1)
 
+        fig.savefig(f'{OUTPUT_DIR_2D}/{os.path.basename(os.path.dirname(path))}_with_image.png', bbox_inches='tight',
+                    pad_inches=0)
+        plt.close(fig)
+
+        fig, ax = plt.subplots()
+        ax.axis(False)
+        ax.set_aspect('equal')
+        ax.invert_yaxis()
+
+        for pred_type in pred_types.values():
+            ax.plot(preds[pred_type.slice, 0],
+                    preds[pred_type.slice, 1],
+                    color=pred_type.color,
+                    marker='o')
+
         fig.savefig(f'{OUTPUT_DIR_2D}/{os.path.basename(os.path.dirname(path))}.png', bbox_inches='tight', pad_inches=0)
         plt.close(fig)
+
     return preds
 
 
